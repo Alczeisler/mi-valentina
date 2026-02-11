@@ -1,4 +1,4 @@
-// CUSTOMIZE THESE WITH YOUR PHOTOS AND MEMORIES!
+
 const episodes = [
     {
         id: 1,
@@ -378,4 +378,9 @@ function retryStory() {
     
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
 }
+
+window.addEventListener('load', function() {
+    document.getElementById('loadingScreen').style.display = 'none';
+});
