@@ -1,0 +1,929 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Nanum+Gothic:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nanum Gothic', sans-serif;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.drama-title {
+    text-align: center;
+    margin-bottom: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.drama-title h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 3rem;
+    color: #d4526e;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.instructions {
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.progress {
+    margin-top: 20px;
+}
+
+#progressText {
+    display: block;
+    color: #d4526e;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #d4526e, #ff6b9d);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.gallery-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+    background: white;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+.gallery-item.completed {
+    opacity: 0.7;
+    border: 3px solid #d4526e;
+}
+
+.gallery-item.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #d4526e;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.gallery-info {
+    padding: 15px;
+    background: white;
+}
+
+.episode-tag {
+    color: #d4526e;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.gallery-title {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 0;
+    overflow-y: auto;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    max-height: 100vh;
+    overflow-y: auto;
+    position: relative;
+    margin: auto;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+}
+.close-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+.episode-header {
+    background: linear-gradient(135deg, #d4526e, #ff6b9d);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.episode-number {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.episode-header h2 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.8rem;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.photo-container {
+    position: relative;
+    background: #000;
+    width: 100%;
+}
+
+#modalImage {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 50vh;
+    object-fit: contain;
+}
+
+.heart-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(212, 82, 110, 0.3);
+    cursor: pointer;
+}
+
+.heart-overlay:hover {
+    background: rgba(212, 82, 110, 0.5);
+}
+
+.heart-overlay.found {
+    display: none;
+}
+
+.heart-indicator {
+    position: absolute;
+    font-size: 3rem;
+    animation: heartbeat 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.heart-hint {
+  position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    padding: 0 20px;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+.content-section {
+    padding: 0;
+}
+
+.question-section {
+    padding: 25px 20px;
+}
+
+.question-section.hidden {
+    display: none;
+}
+
+.kdrama-caption {
+    font-style: italic;
+    color: #888;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.question {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.answers {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.answer-btn {
+    padding: 18px 15px;
+    background: #f8f8f8;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.answer-btn:hover {
+    background: #fff0f3;
+    border-color: #d4526e;
+    transform: translateX(5px);
+}
+
+.answer-btn.active {
+  transform: scale(0.98)
+}
+
+.answer-btn.correct {
+    background: #d4ffdf;
+    border-color: #4caf50;
+    animation: correctPulsa 0.5s ease;
+}
+
+.answer-btn.wrong {
+    background: #ffe0e0;
+    border-color: #f44336;
+    animation: shake 0.5s ease;
+}
+
+@keyframes correctPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.ost-playing {
+    text-align: center;
+    padding: 15px 20px;
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+}
+
+/*obile optimizations */
+@media (max-width: 768px) {
+    .modal {
+        padding: 0;
+        align-items: flex-start;
+    }
+    
+    .modal-content {
+        border-radius: 0;
+        min-height: 100vh;
+    }
+    
+    .episode-header {
+        padding: 25px 15px;
+    }
+    
+    .episode-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    #modalImage {
+        max-height: 40vh;
+    }
+    
+    .heart-indicator {
+        font-size: 2.5rem;
+    }
+    
+    .heart-hint {
+        font-size: 1.1rem;
+    }
+    
+    .question-section {
+        padding: 20px 15px;
+    }
+    
+    .question {
+        font-size: 1rem;
+    }
+    
+    .answer-btn {
+        padding: 15px 12px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .modal-content {
+        max-width: 700px;
+        margin: 20px auto;
+        border-radius: 20px;
+        max-height: calc(100vh - 40px);
+    }
+    
+    #modalImage {
+        max-height: 45vh;
+        border-radius: 0;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .episode-header h2 {
+        font-size: 1.3rem;
+    }
+    
+.heart-indicator {
+        font-size: 2rem;
+    }
+    
+    .heart-hint {
+        font-size: 1rem;
+    }
+    
+    .answer-btn {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+
+.final-scene {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease;
+}
+
+.final-scene.hidden {
+    display: none;
+}
+
+.final-title {
+    font-family: 'Noto Serif KR', serif;
+    color: #d4526e;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.final-title::before {
+    content: "Episode 11 • ";
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.final-quote {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.letter {
+    background: #fff9f0;
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    line-height: 1.8;
+}
+
+.letter p {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.itinerary {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+}
+
+.itinerary h3 {
+    font-family: 'Noto Serif KR', serif;
+    color: #d4526e;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.coming-soon {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.scene-list {
+    display: grid;
+    gap: 15px;
+}
+
+.scene {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #d4526e;
+}
+
+.scene-time {
+    display: block;
+    color: #d4526e;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.scene-desc {
+    display: block;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.final-question {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.romantic-text {
+    font-size: 2rem;
+    color: #d4526e;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.ost-reference {
+    color: #888;
+    font-style: italic;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .drama-title h1 {
+        font-size: 2rem;
+    }
+    
+    .gallery-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .final-title {
+        font-size: 1.8rem;
+    }
+    
+    .romantic-text {
+        font-size: 1.5rem;
+    }
+}
+
+.heart-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+.heart-overlay.found {
+    display: none;
+}
+
+.heart-indicator {
+    position: absolute;
+    font-size: 3rem;
+    animation: heartbeat 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+}
+
+.heart-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* Music toggle button */
+.music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #d4526e, #ff6b9d);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(212, 82, 110, 0.4);
+    z-index: 9999;
+    transition: all 0.3s;
+}
+
+.music-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(212, 82, 110, 0.6);
+}
+
+.music-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Mobile adjustments for music button */
+@media (max-width: 768px) {
+    .music-toggle {
+        bottom: 15px;
+        right: 15px;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Answer buttons */
+.answer-buttons {
+    display: grid;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 0 20px;
+}
+
+.final-btn {
+    padding: 20px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.yes-btn {
+    background: linear-gradient(135deg, #d4526e, #ff6b9d);
+    color: white;
+}
+
+.yes-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(212, 82, 110, 0.4);
+}
+
+.absolutely-btn {
+    background: linear-gradient(135deg, #ff6b9d, #ffa6c9);
+    color: white;
+}
+
+.absolutely-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+}
+
+.retry-btn {
+    background: #f8f8f8;
+    color: #666;
+    border: 2px solid #ddd;
+}
+
+.retry-btn:hover {
+    background: white;
+    border-color: #d4526e;
+    color: #d4526e;
+    transform: translateY(-3px);
+}
+
+.final-btn:active {
+    transform: scale(0.95);
+}
+
+/* YES Screen */
+.yes-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 1s ease;
+}
+
+.yes-screen.hidden {
+    display: none;
+}
+
+.yes-content {
+    text-align: center;
+    z-index: 2;
+    animation: slideUp 1s ease;
+    padding: 20px;
+}
+
+.yes-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 4rem;
+    color: #d4526e;
+    margin-bottom: 20px;
+    animation: scaleIn 0.8s ease;
+}
+
+.yes-message {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: fadeInText 1s ease 0.5s forwards;
+}
+
+.next-episode {
+    font-size: 1.5rem;
+    color: #d4526e;
+    font-weight: bold;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInText 1s ease 1s forwards;
+}
+
+.premiere-date {
+    opacity: 0;
+    animation: fadeInText 1s ease 1.5s forwards;
+}
+
+.premiere-date p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 10px 0;
+}
+
+.small-text {
+    font-size: 1rem;
+    font-style: italic;
+    color: #999;
+}
+
+/* Floating hearts */
+.hearts-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.floating-heart {
+    position: absolute;
+    font-size: 2rem;
+    animation: floatUp 4s ease-in infinite;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatUp {
+    0% {
+        bottom: -10%;
+        opacity: 0;
+        transform: translateX(0) rotate(0deg);
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        bottom: 110%;
+        opacity: 0;
+        transform: translateX(50px) rotate(360deg);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .answer-buttons {
+        padding: 0 15px;
+    }
+    
+    .final-btn {
+        padding: 18px;
+        font-size: 1.1rem;
+    }
+    
+    .yes-title {
+        font-size: 2.5rem;
+    }
+    
+    .yes-message {
+        font-size: 1.3rem;
+    }
+    
+    .next-episode {
+        font-size: 1.2rem;
+    }
+    
+    .premiere-date p {
+        font-size: 1rem;
+    }
+    
+    .floating-heart {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .yes-title {
+        font-size: 2rem;
+    }
+    
+    .yes-message {
+        font-size: 1.1rem;
+    }
+    
+    .next-episode {
+        font-size: 1rem;
+    }
+}
